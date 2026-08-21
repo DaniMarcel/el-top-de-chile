@@ -1,7 +1,7 @@
 import { Pool } from 'pg';
 
 /**
- * Capa de datos de EL TRONO.
+ * Capa de datos de TOP DE CHILE.
  *
  * En desarrollo usa SQLite local (node:sqlite) para simplicidad;
  * en producción (Vercel) usa Postgres vía Supabase.

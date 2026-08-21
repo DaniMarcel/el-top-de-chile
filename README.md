@@ -1,4 +1,4 @@
-# EL TRONO 👑
+# TOP DE CHILE 👑
 
 **El ranking de tiendas de Chile que se compra.** El Top 1 es de quien pague más: una tienda paga el mínimo para coronarse #1, otra paga más y la destrona (la anterior baja un puesto). Cada peso queda público en el Ledger.
 

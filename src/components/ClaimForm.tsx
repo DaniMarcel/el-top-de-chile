@@ -188,7 +188,7 @@ export default function ClaimForm({
       <p className="text-center text-[11px] leading-relaxed text-mut">
         Al pagar confirmas que entendiste el juego: esto es un <b>ranking pagado</b>, no editorial. Si
         alguien ofrece más, tu tienda baja un puesto. Sin reembolsos: estás comprando visibilidad
-        pública en EL TRONO.
+        pública en TOP DE CHILE.
       </p>
     </form>
   );

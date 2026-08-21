@@ -6,7 +6,7 @@ import { clp, fmtDateTime } from '@/lib/format';
 export const metadata: Metadata = {
   title: 'Ledger público',
   description:
-    'Cada peso pagado en EL TRONO, a la vista de todos. Transparencia total: esto es un ranking pagado y se nota.',
+    'Cada peso pagado en TOP DE CHILE, a la vista de todos. Transparencia total: esto es un ranking pagado y se nota.',
 };
 
 export default async function LedgerPage() {

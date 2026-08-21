@@ -17,7 +17,7 @@ export default async function Home() {
       {/* Hero */}
       <section className="space-y-5 text-center">
         <h1 className="crown-glow text-5xl font-black tracking-tight text-gold sm:text-7xl">
-          EL TRONO 👑
+          TOP DE CHILE 👑
         </h1>
         <p className="mx-auto max-w-2xl text-lg text-mut sm:text-xl">
           El ranking de tiendas de Chile que <b className="text-goldsoft">se compra</b>. El Top 1 es

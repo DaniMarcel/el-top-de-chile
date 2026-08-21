@@ -6,8 +6,8 @@ import { config } from '@/lib/config';
 export const metadata: Metadata = {
   metadataBase: new URL(config.siteUrl),
   title: {
-    default: 'EL TRONO 👑 — El ranking de tiendas de Chile que se compra',
-    template: '%s · EL TRONO',
+    default: 'TOP DE CHILE 👑 — El ranking de tiendas de Chile que se compra',
+    template: '%s · TOP DE CHILE',
   },
   description:
     'El Top 1 de cada rubro es de quien pague más. Ranking 100% pagado y 100% transparente: cada peso está en el Ledger público. ¿Tu tienda se atreve?',
@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3">
             <Link href="/" className="flex items-center gap-2 text-lg font-black tracking-tight">
               <span className="text-2xl">👑</span>
-              <span className="text-gold crown-glow">EL TRONO</span>
+              <span className="text-gold crown-glow">TOP DE CHILE</span>
               <span className="hidden text-xs font-bold uppercase tracking-widest text-mut sm:inline">
                 · Chile
               </span>
@@ -56,7 +56,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </Link>
               . No es un ranking editorial.
             </p>
-            <p>Hecho en Chile 🇨🇱 con cariño — EL TRONO 👑</p>
+            <p>Hecho en Chile 🇨🇱 con cariño — TOP DE CHILE 👑</p>
           </div>
         </footer>
       </body>

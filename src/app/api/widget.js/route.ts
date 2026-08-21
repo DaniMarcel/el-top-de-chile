@@ -3,7 +3,7 @@ import { config } from '@/lib/config';
 /**
  * Widget embebible para que las tiendas lo pongan en su propia web:
  *   <script src="https://TU-DOMINIO/api/widget.js" data-store="mi-tienda" data-theme="dark"></script>
- * Renderiza una badge con la posición actual de la tienda en EL TRONO.
+ * Renderiza una badge con la posición actual de la tienda en TOP DE CHILE.
  *
  * Nota: el payload se arma con strings planos (sin template literals)
  * para evitar problemas de parseo de SWC/Turbopack con caracteres no-ASCII.
@@ -63,7 +63,7 @@ export async function GET() {
     "            '<span style=\"font-size:11px;color:' + c.mut + '\">' + esc(verified) + '</span></div>' +",
     "          (price ? '<div style=\"margin-top:2px;color:' + c.mut + '\">' + esc(price) + '</div>' : '') +",
     "          '<div style=\"margin-top:8px;font-size:11px\">' +",
-    "            '<a href=\"' + esc(SITE + '/tienda/' + s.slug) + '\" target=\"_blank\" rel=\"noopener\" style=\"color:' + c.link + ';font-weight:700;text-decoration:none\">Ver en EL TRONO \\u{2197}</a>' +",
+    "            '<a href=\"' + esc(SITE + '/tienda/' + s.slug) + '\" target=\"_blank\" rel=\"noopener\" style=\"color:' + c.link + ';font-weight:700;text-decoration:none\">Ver en TOP DE CHILE \\u{2197}</a>' +",
     "          '</div>' +",
     "        '</div>';",
     '    })',

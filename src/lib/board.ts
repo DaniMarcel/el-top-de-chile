@@ -328,7 +328,7 @@ export async function createClaim(input: ClaimInput) {
   const redirectUrl = await createFlowPayment({
     orderId,
     amount,
-    subject: 'El Trono - ' + cat.name + ' - ' + name,
+    subject: 'Top de Chile - ' + cat.name + ' - ' + name,
     email: input.email.trim(),
     urlReturn: config.siteUrl + '/?king=' + slug + '&cat=' + cat.slug,
     urlConfirmation: config.siteUrl + '/api/flow/webhook',

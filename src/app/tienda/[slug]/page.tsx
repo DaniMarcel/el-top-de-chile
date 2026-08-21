@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description:
       store.pitch ||
       store.name +
-        ' en el ranking pagado EL TRONO: ' +
+        ' en el ranking pagado TOP DE CHILE: ' +
         (store.position
           ? 'posición #' + store.position + ' en ' + store.cat_name + ', pagó ' + clp(store.current_price ?? 0) + ' por el trono.'
           : '¿recuperará su trono?'),
