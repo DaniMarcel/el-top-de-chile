@@ -66,136 +66,181 @@ function row<T>(r: Record<string, unknown> | undefined): T | undefined {
 
 // ============ Consultas ============
 
+/**
+ * Envuelve una consulta en try/catch: si la DB falla (caída, red, timeout),
+ * devuelve el valor vacío en vez de tirar un 500. La web siempre renderiza.
+ */
+async function safe<T>(fallback: T, fn: () => Promise<T>): Promise<T> {
+  try {
+    return await fn();
+  } catch {
+    return fallback;
+  }
+}
+
 export async function getCategories(): Promise<CategoryRow[]> {
-  const r = await db.prepare('SELECT * FROM categories WHERE active = 1 ORDER BY id').all();
-  return rows<CategoryRow>(r);
+  return safe<CategoryRow[]>([], async () => {
+    const r = await db.prepare('SELECT * FROM categories WHERE active = 1 ORDER BY id').all();
+    return rows<CategoryRow>(r);
+  });
 }
 
 export async function getCategoryBySlug(slug: string): Promise<CategoryRow | undefined> {
-  return row<CategoryRow>(await db.prepare('SELECT * FROM categories WHERE slug = ?').get(slug));
+  return safe<CategoryRow | undefined>(undefined, async () => {
+    return row<CategoryRow>(
+      await db.prepare('SELECT * FROM categories WHERE slug = ?').get(slug)
+    );
+  });
 }
 
 export async function getBoard(categoryId: number, limit?: number): Promise<BoardRow[]> {
-  const sql = `
-    SELECT s.*, c.name AS cat_name, c.slug AS cat_slug
-    FROM stores s JOIN categories c ON c.id = s.category_id
-    WHERE s.category_id = ? AND s.position IS NOT NULL
-    ORDER BY s.position ASC
-  `;
-  const r = limit
-    ? await db.prepare(sql + ' LIMIT ?').all(categoryId, limit)
-    : await db.prepare(sql).all(categoryId);
-  return rows<BoardRow>(r);
+  return safe<BoardRow[]>([], async () => {
+    const sql = `
+      SELECT s.*, c.name AS cat_name, c.slug AS cat_slug
+      FROM stores s JOIN categories c ON c.id = s.category_id
+      WHERE s.category_id = ? AND s.position IS NOT NULL
+      ORDER BY s.position ASC
+    `;
+    const r = limit
+      ? await db.prepare(sql + ' LIMIT ?').all(categoryId, limit)
+      : await db.prepare(sql).all(categoryId);
+    return rows<BoardRow>(r);
+  });
 }
 
 export async function getTopStore(categoryId: number): Promise<StoreRow | undefined> {
-  return row<StoreRow>(
-    await db.prepare('SELECT * FROM stores WHERE category_id = ? AND position = 1').get(categoryId)
-  );
+  return safe<StoreRow | undefined>(undefined, async () => {
+    return row<StoreRow>(
+      await db.prepare('SELECT * FROM stores WHERE category_id = ? AND position = 1').get(categoryId)
+    );
+  });
 }
 
 export async function getStoreBySlug(slug: string): Promise<BoardRow | undefined> {
-  return row<BoardRow>(
-    await db
-      .prepare(
-        `SELECT s.*, c.name AS cat_name, c.slug AS cat_slug
-         FROM stores s JOIN categories c ON c.id = s.category_id
-         WHERE s.slug = ?`
-      )
-      .get(slug)
-  );
+  return safe<BoardRow | undefined>(undefined, async () => {
+    return row<BoardRow>(
+      await db
+        .prepare(
+          `SELECT s.*, c.name AS cat_name, c.slug AS cat_slug
+           FROM stores s JOIN categories c ON c.id = s.category_id
+           WHERE s.slug = ?`
+        )
+        .get(slug)
+    );
+  });
 }
 
 export async function getAllStores(): Promise<BoardRow[]> {
-  const r = await db
-    .prepare(
-      `SELECT s.*, c.name AS cat_name, c.slug AS cat_slug
-       FROM stores s JOIN categories c ON c.id = s.category_id
-       ORDER BY s.id`
-    )
-    .all();
-  return rows<BoardRow>(r);
+  return safe<BoardRow[]>([], async () => {
+    const r = await db
+      .prepare(
+        `SELECT s.*, c.name AS cat_name, c.slug AS cat_slug
+         FROM stores s JOIN categories c ON c.id = s.category_id
+         ORDER BY s.id`
+      )
+      .all();
+    return rows<BoardRow>(r);
+  });
 }
 
 export async function getStoreHistory(storeId: number): Promise<TxRow[]> {
-  const r = await db
-    .prepare(
-      `SELECT * FROM transactions WHERE store_id = ? AND status = 'paid'
-       ORDER BY paid_at DESC, id DESC LIMIT 20`
-    )
-    .all(storeId);
-  return rows<TxRow>(r);
+  return safe<TxRow[]>([], async () => {
+    const r = await db
+      .prepare(
+        `SELECT * FROM transactions WHERE store_id = ? AND status = 'paid'
+         ORDER BY paid_at DESC, id DESC LIMIT 20`
+      )
+      .all(storeId);
+    return rows<TxRow>(r);
+  });
 }
 
 export async function getLedger(limit = 100): Promise<LedgerRow[]> {
-  const r = await db
-    .prepare(
-      `SELECT t.*, s.name AS store_name, s.slug AS store_slug, c.name AS cat_name,
-              ps.name AS prev_name
-       FROM transactions t
-       JOIN stores s ON s.id = t.store_id
-       JOIN categories c ON c.id = t.category_id
-       LEFT JOIN stores ps ON ps.id = t.prev_king_id
-       WHERE t.status = 'paid'
-       ORDER BY t.paid_at DESC, t.id DESC
-       LIMIT ?`
-    )
-    .all(limit);
-  return rows<LedgerRow>(r);
-}
-
-export async function getTxByOrder(orderId: string) {
-  return row<{
-    id: number;
-    store_id: number;
-    category_id: number;
-    amount_clp: number;
-    status: string;
-    flow_order: string | null;
-    prev_king_id: number | null;
-    payer_email: string;
-    created_at: string;
-    paid_at: string | null;
-    store_slug: string;
-    cat_slug: string;
-  }>(
-    await db
+  return safe<LedgerRow[]>([], async () => {
+    const r = await db
       .prepare(
-        `SELECT t.*, s.slug AS store_slug, c.slug AS cat_slug
+        `SELECT t.*, s.name AS store_name, s.slug AS store_slug, c.name AS cat_name,
+                ps.name AS prev_name
          FROM transactions t
          JOIN stores s ON s.id = t.store_id
          JOIN categories c ON c.id = t.category_id
-         WHERE t.flow_order = ?`
+         LEFT JOIN stores ps ON ps.id = t.prev_king_id
+         WHERE t.status = 'paid'
+         ORDER BY t.paid_at DESC, t.id DESC
+         LIMIT ?`
       )
-      .get(orderId)
+      .all(limit);
+    return rows<LedgerRow>(r);
+  });
+}
+
+export async function getTxByOrder(orderId: string) {
+  return safe(
+    undefined,
+    async () =>
+      row<{
+        id: number;
+        store_id: number;
+        category_id: number;
+        amount_clp: number;
+        status: string;
+        flow_order: string | null;
+        prev_king_id: number | null;
+        payer_email: string;
+        created_at: string;
+        paid_at: string | null;
+        store_slug: string;
+        cat_slug: string;
+      }>(
+        await db
+          .prepare(
+            `SELECT t.*, s.slug AS store_slug, c.slug AS cat_slug
+             FROM transactions t
+             JOIN stores s ON s.id = t.store_id
+             JOIN categories c ON c.id = t.category_id
+             WHERE t.flow_order = ?`
+          )
+          .get(orderId)
+      )
   );
 }
 
 export async function getStats() {
-  const rev = row<{ total: number }>(
-    await db
-      .prepare(
-        `SELECT COALESCE(SUM(amount_clp), 0) AS total FROM transactions WHERE status = 'paid'`
-      )
-      .get()
+  return safe(
+    {
+      revenue: 0,
+      paidCount: 0,
+      pendingCount: 0,
+      storeCount: 0,
+      onBoardCount: 0,
+    },
+    async () => {
+      const rev = row<{ total: number }>(
+        await db
+          .prepare(
+            `SELECT COALESCE(SUM(amount_clp), 0) AS total FROM transactions WHERE status = 'paid'`
+          )
+          .get()
+      );
+      const paid = row<{ n: number }>(
+        await db.prepare(`SELECT COUNT(*) AS n FROM transactions WHERE status = 'paid'`).get()
+      );
+      const pending = row<{ n: number }>(
+        await db.prepare(`SELECT COUNT(*) AS n FROM transactions WHERE status = 'pending'`).get()
+      );
+      const stores = row<{ n: number }>(await db.prepare(`SELECT COUNT(*) AS n FROM stores`).get());
+      const onBoard = row<{ n: number }>(
+        await db.prepare(`SELECT COUNT(*) AS n FROM stores WHERE position IS NOT NULL`).get()
+      );
+      return {
+        revenue: rev?.total ?? 0,
+        paidCount: paid?.n ?? 0,
+        pendingCount: pending?.n ?? 0,
+        storeCount: stores?.n ?? 0,
+        onBoardCount: onBoard?.n ?? 0,
+      };
+    }
   );
-  const paid = row<{ n: number }>(
-    await db.prepare(`SELECT COUNT(*) AS n FROM transactions WHERE status = 'paid'`).get()
-  );
-  const pending = row<{ n: number }>(
-    await db.prepare(`SELECT COUNT(*) AS n FROM transactions WHERE status = 'pending'`).get()
-  );
-  const stores = row<{ n: number }>(await db.prepare(`SELECT COUNT(*) AS n FROM stores`).get());
-  const onBoard = row<{ n: number }>(
-    await db.prepare(`SELECT COUNT(*) AS n FROM stores WHERE position IS NOT NULL`).get()
-  );
-  return {
-    revenue: rev?.total ?? 0,
-    paidCount: paid?.n ?? 0,
-    pendingCount: pending?.n ?? 0,
-    storeCount: stores?.n ?? 0,
-    onBoardCount: onBoard?.n ?? 0,
-  };
 }
 
 // ============ Visitas (contador en vivo) ============
