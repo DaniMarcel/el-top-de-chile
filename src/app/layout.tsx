@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Script from 'next/script';
 import './globals.css';
 import { config } from '@/lib/config';
 
@@ -61,6 +62,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-screen flex flex-col">
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-9VMHF6S0DV"
+          strategy="afterInteractive"
+        />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-9VMHF6S0DV');
+          `}
+        </Script>
         <header className="sticky top-0 z-50 border-b border-line bg-white/80 backdrop-blur-lg">
           <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3">
             <Link href="/" className="font-extrabold text-lg tracking-tight text-ink">
