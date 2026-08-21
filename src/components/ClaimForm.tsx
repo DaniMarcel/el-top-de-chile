@@ -82,7 +82,7 @@ export default function ClaimForm({
             name="name"
             required
             maxLength={60}
-            placeholder="Ej: SportNutriShop"
+            placeholder="Ej: Mi Tienda CL"
             className="input"
           />
         </div>
