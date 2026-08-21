@@ -4,8 +4,28 @@ import VisitorCounter from '@/components/VisitorCounter';
 import { getBoard, getCategories, getStats, getTopStore, requiredAmount } from '@/lib/board';
 import { clp } from '@/lib/format';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   const cats = await getCategories();
+  if (cats.length === 0) {
+    return (
+      <div className="space-y-12 pt-10">
+        <section className="space-y-5 text-center">
+          <h1 className="crown-glow text-5xl font-black tracking-tight text-gold sm:text-7xl">
+            TOP DE CHILE 👑
+          </h1>
+          <p className="mx-auto max-w-2xl text-lg text-mut sm:text-xl">
+            El ranking de tiendas de Chile que <b className="text-goldsoft">se compra</b>. El Top 1 es
+            de quien pague más — y todo Chile puede ver cuánto pagó.
+          </p>
+          <p className="text-sm text-mut">
+            ⚙️ Estamos sembrando los primeros rubros. Vuelve en unos minutos.
+          </p>
+        </section>
+      </div>
+    );
+  }
   const first = cats[0];
   const board = await getBoard(first.id, 5);
   const top = await getTopStore(first.id);

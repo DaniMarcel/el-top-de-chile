@@ -9,6 +9,8 @@ export const metadata: Metadata = {
     'Cada peso pagado en TOP DE CHILE, a la vista de todos. Transparencia total: esto es un ranking pagado y se nota.',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function LedgerPage() {
   const [ledger, stats] = await Promise.all([getLedger(100), getStats()]);
 

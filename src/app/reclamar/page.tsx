@@ -10,6 +10,8 @@ export const metadata: Metadata = {
     'Toma el trono de tu rubro: paga el mínimo y tu tienda queda #1 en el ranking pagado de Chile.',
 };
 
+export const dynamic = 'force-dynamic';
+
 interface Props {
   searchParams: Promise<{ cat?: string }>;
 }
