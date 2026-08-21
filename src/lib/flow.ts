@@ -1,11 +1,14 @@
 import crypto from 'node:crypto';
 import { config } from './config.ts';
 
-/** Firma estilo Flow.cl: md5(secret + params ordenados alfabéticamente concatenados k+v) */
+/**
+ * Firma estilo Flow.cl (API actual): HMAC-SHA256 con el secretKey como llave.
+ * Los parámetros se ordenan alfabéticamente y se concatenan nombre+valor (sin "s").
+ */
 function sign(params: Record<string, string>, secret: string): string {
   const keys = Object.keys(params).sort();
   const str = keys.map((k) => `${k}${params[k]}`).join('');
-  return crypto.createHash('md5').update(secret + str).digest('hex');
+  return crypto.createHmac('sha256', secret).update(str).digest('hex');
 }
 
 export interface FlowOrder {
@@ -51,10 +54,40 @@ export async function createFlowPayment(opts: FlowOrder): Promise<string> {
   return data.url;
 }
 
-/** Verifica la firma del webhook de Flow.cl (en modo demo siempre válido). */
+/**
+ * Verifica la firma del webhook de Flow.cl (en modo demo siempre válido).
+ * NOTA: el webhook real de Flow envía un `token`; la app debe llamar a
+ * payment/getStatus con ese token para confirmar el pago (ver verifyPayment).
+ */
 export function verifyFlowWebhook(params: Record<string, string>): boolean {
   if (config.mockPayments) return true;
   const { s, ...rest } = params;
   if (!s) return false;
   return sign(rest, config.flowSecret) === s;
+}
+
+/**
+ * Consulta el estado real de un pago en Flow (payment/getStatus).
+ * Se llama con el token que Flow envía al webhook, para confirmar
+ * que el pago está "Aprobado" antes de destronar.
+ */
+export async function getFlowPaymentStatus(token: string): Promise<{
+  status: string;
+  amount: number;
+  commerceOrder: string;
+} | null> {
+  const params: Record<string, string> = {
+    apiKey: config.flowApiKey,
+    token,
+  };
+  params.s = sign(params, config.flowSecret);
+
+  const res = await fetch('https://www.flow.cl/api/payment/getStatus?' + new URLSearchParams(params).toString());
+  const data = await res.json();
+  if (!data || data.code) return null;
+  return {
+    status: String(data.status || ''),
+    amount: Number(data.amount || 0),
+    commerceOrder: String(data.commerceOrder || ''),
+  };
 }
