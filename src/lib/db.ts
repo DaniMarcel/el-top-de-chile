@@ -101,7 +101,7 @@ function pgPool() {
     // Forzar IPv4: el sandbox de build de Vercel no tiene ruta IPv6
     family: 4,
     ssl: process.env.PGSSL === 'false' ? false : { rejectUnauthorized: false },
-  });
+  } as ConstructorParameters<typeof Pool>[0] & { family?: number });
   return pool;
 }
 
