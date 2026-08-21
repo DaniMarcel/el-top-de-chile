@@ -13,7 +13,7 @@ const reset = process.argv.includes('--reset');
 
 if (reset) {
   // En SQLite el schema se crea en migrate(); acá solo limpiamos filas.
-  // En Postgres el schema se crea con supabase/schema.sql.
+  // En Postgres el schema se crea con neon/schema.sql.
   const { db } = await import('../src/lib/db.ts');
   await db.exec('DELETE FROM transactions; DELETE FROM stores; DELETE FROM categories;');
   console.log('🧹 DB limpiada');

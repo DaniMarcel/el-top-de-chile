@@ -21,7 +21,7 @@ try {
   console.log('OK conexión | db:', ping.rows[0].db);
 
   // 1) Schema (tablas + categorías)
-  const schema = readFileSync(new URL('../supabase/schema.sql', import.meta.url), 'utf8');
+  const schema = readFileSync(new URL('../neon/schema.sql', import.meta.url), 'utf8');
   await pool.query(schema);
   console.log('OK schema + categorías');
 

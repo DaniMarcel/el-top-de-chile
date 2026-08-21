@@ -22,18 +22,18 @@ npm run dev         # http://localhost:3000
 
 El home muestra **visitantes en línea** (últimos 5 min) y **visitas únicas en 24 h**. Se registra automáticamente al cargar la página; bots/crawlers se ignoran y las IP se usan solo para contar (sin guardar datos personales).
 
-## Producción: Vercel + Supabase ($0)
+## Producción: Vercel + Neon ($0)
 
-La app usa **SQLite en dev** y **Postgres (Supabase) en producción**, elegido automáticamente por la variable `DATABASE_URL`. La lógica del juego es idéntica en ambos.
+La app usa **SQLite en dev** y **Postgres (Neon) en producción**, elegido automáticamente por la variable `DATABASE_URL`. La lógica del juego es idéntica en ambos.
 
-### 1. Supabase (la base de datos)
+### 1. Neon (la base de datos)
 
-1. Crea un proyecto gratis en [supabase.com](https://supabase.com) (región **South America (São Paulo)** para mejor latencia en Chile).
-2. Ve a **SQL Editor** → New query → pega el contenido de `supabase/schema.sql` → **Run**. Esto crea tablas + categorías.
-3. Ve a **Project Settings → Database → Connection string → URI** y copia la URL (usa el **pooler** `:6543` para serverless).
-4. (Opcional) Siembra tiendas demo contra Supabase:
+1. Crea un proyecto gratis en [neon.tech](https://neon.tech) (región **South America (São Paulo)** para mejor latencia en Chile).
+2. Ve a **SQL Editor** → New query → pega el contenido de `neon/schema.sql` → **Run**. Esto crea tablas + categorías.
+3. Ve a **Connection Details** → copia la connection string (ya incluye `sslmode=require`).
+4. (Opcional) Siembra tiendas demo contra Neon:
    ```bash
-   DATABASE_URL="postgresql://postgres.XXXX:pass@aws-0-sa-east-1.pooler.supabase.com:6543/postgres" npm run seed
+   DATABASE_URL="postgresql://neondb_owner:xxxxx@ep-xxxx.sa-east-1.aws.neon.tech/neondb?sslmode=require" npm run seed
    ```
 
 ### 2. Vercel
@@ -41,7 +41,7 @@ La app usa **SQLite en dev** y **Postgres (Supabase) en producción**, elegido a
 1. Sube el proyecto a GitHub (puedes crear el repo con `gh repo create` o desde github.com → New repository → push).
 2. En [vercel.com](https://vercel.com) → **Add New → Project** → importa el repo. Vercel detecta Next.js solo.
 3. En **Settings → Environment Variables** agrega:
-   - `DATABASE_URL` = la URL del pooler de Supabase
+   - `DATABASE_URL` = la connection string de Neon
    - `SITE_URL` = `https://topdechile.cl`
    - `ADMIN_TOKEN` = un token seguro (`openssl rand -hex 16`)
    - `MOCK_PAYMENTS` = `true` (hasta configurar Flow; el checkout simulado sirve para lanzar)
@@ -69,7 +69,7 @@ La app usa **SQLite en dev** y **Postgres (Supabase) en producción**, elegido a
 | `MIN_INCREMENT` | `500` | Incremento mínimo para destronar |
 | `ADMIN_TOKEN` | `eltrono-admin` | Token de `/admin` |
 | `SITE_URL` | `http://localhost:3000` | URL pública (Flow, widget, SEO) |
-| `DATABASE_URL` | *(vacío)* | Si está definida → Postgres/Supabase; si no → SQLite local |
+| `DATABASE_URL` | *(vacío)* | Si está definida → Postgres/Neon; si no → SQLite local |
 
 ## Widget embebible (para las tiendas)
 
@@ -88,7 +88,7 @@ src/
     flow.ts       integración Flow.cl (real + mock)
   components/     Board (vivo + confetti), ClaimForm, VisitorCounter, ConfirmForm
 scripts/seed.mts  datos demo (funciona contra SQLite y Postgres)
-supabase/schema.sql  schema + categorías para Supabase
+neon/schema.sql   schema + categorías para Neon
 ```
 
 ## Legal

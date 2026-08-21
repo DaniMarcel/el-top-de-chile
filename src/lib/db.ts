@@ -4,7 +4,7 @@ import { Pool } from 'pg';
  * Capa de datos de TOP DE CHILE.
  *
  * En desarrollo usa SQLite local (node:sqlite) para simplicidad;
- * en producción (Vercel) usa Postgres vía Supabase.
+ * en producción (Vercel) usa Postgres vía Neon.
  *
  * Este módulo exporta un `db` con la misma forma de API que node:sqlite
  * pero ASÍNCRONA, para que `board.ts` sea agnóstico del motor:
@@ -16,7 +16,7 @@ import { Pool } from 'pg';
  *
  * El driver se elige con DATABASE_URL:
  *   - Sin DATABASE_URL  -> SQLite en ./data/trono.db
- *   - Con DATABASE_URL  -> Postgres (pg + pooler de Supabase)
+ *   - Con DATABASE_URL  -> Postgres (pg + Neon)
  */
 
 // ============ SQLite (dev local) ============
@@ -91,7 +91,7 @@ function migrateSqlite(db: DatabaseSync) {
   `);
 }
 
-// ============ Postgres (producción / Supabase) ============
+// ============ Postgres (producción / Neon) ============
 
 function pgPool() {
   const pool = new Pool({
@@ -195,5 +195,5 @@ export function createDb(): DbHandle {
 
 export const db = createDb();
 
-/** true si estamos conectados a Postgres (producción/Supabase), false si SQLite (dev) */
+/** true si estamos conectados a Postgres (producción/Neon), false si SQLite (dev) */
 export const isPg = !!process.env.DATABASE_URL;

@@ -1,6 +1,6 @@
 -- ============================================================
--- EL TRONO — schema para Supabase (Postgres)
--- Ejecutar en: Supabase Dashboard → SQL Editor → New query
+-- EL TRONO — schema para Neon (Postgres)
+-- Ejecutar en: Neon Console → SQL Editor → New query
 -- ============================================================
 
 create table if not exists categories (
@@ -53,7 +53,7 @@ create index if not exists idx_visits_created on visits(created_at);
 
 -- ============================================================
 -- Seed: categorías (las tiendas demo se siembran con `npm run seed`
--- apuntando DATABASE_URL a esta base)
+-- apuntando DATABASE_URL a esta base de Neon)
 -- ============================================================
 insert into categories (slug, name, description) values
   ('suplementos', 'Suplementos y Nutrición', 'Proteínas, creatina y todo para el gym.'),
