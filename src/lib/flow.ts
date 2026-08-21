@@ -51,7 +51,10 @@ export async function createFlowPayment(opts: FlowOrder): Promise<string> {
   if (!data.url || !data.token) {
     throw new Error('Flow.cl respondió un error: ' + JSON.stringify(data));
   }
-  return data.url;
+  // Flow devuelve url y token separados: hay que redirigir a la url CON el token
+  // (si la url ya lo trae, no duplicar)
+  const sep = data.url.includes('?') ? '&' : '?';
+  return data.url + sep + 'token=' + encodeURIComponent(data.token);
 }
 
 /**
