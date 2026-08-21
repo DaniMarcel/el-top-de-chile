@@ -5,9 +5,9 @@ import { config } from '@/lib/config';
 import { clp } from '@/lib/format';
 
 export const metadata: Metadata = {
-  title: 'Reclama el Top 1',
+  title: 'Reclama el Top 1 — Pon tu tienda #1 en Chile',
   description:
-    'Toma el trono de tu rubro: paga el mínimo y tu tienda queda #1 en el ranking pagado de Chile.',
+    'Toma el trono de tu rubro: paga el mínimo y tu tienda queda #1 en el ranking pagado de las mejores tiendas de Chile.',
 };
 
 export const dynamic = 'force-dynamic';

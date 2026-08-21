@@ -6,12 +6,47 @@ import { config } from '@/lib/config';
 export const metadata: Metadata = {
   metadataBase: new URL(config.siteUrl),
   title: {
-    default: 'TOP DE CHILE — El ranking de tiendas que se compra',
+    default: 'TOP DE CHILE — El ranking de tiendas de Chile que se compra',
     template: '%s · TOP DE CHILE',
   },
   description:
-    'El Top 1 de cada rubro es de quien pague más. Ranking 100% pagado y transparente: cada peso está en el Ledger público.',
+    'El Top 1 de cada rubro es de quien pague más. Ranking 100% pagado y transparente de las mejores tiendas de Chile.',
+  keywords: [
+    'top tiendas Chile',
+    'mejores tiendas Chile',
+    'ranking tiendas Chile',
+    'top empresas Chile',
+    'mejores empresas Chile',
+    'tiendas online Chile',
+    'ranking empresas Chile',
+    'top de Chile',
+    'suplementos Chile',
+    'sneakers Chile',
+    'ropa Chile',
+    'tecnología Chile',
+    'café Chile',
+    'belleza Chile',
+    'mascotas Chile',
+    'gaming Chile',
+  ],
   icons: { icon: '/icon.svg' },
+  openGraph: {
+    type: 'website',
+    locale: 'es_CL',
+    siteName: 'TOP DE CHILE',
+    title: 'TOP DE CHILE — El ranking de tiendas de Chile que se compra',
+    description:
+      'El Top 1 de cada rubro es de quien pague más. Ranking pagado y transparente de las mejores tiendas online de Chile.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'TOP DE CHILE — El ranking que se compra',
+    description:
+      'El Top 1 de cada rubro es de quien pague más. ¿Tu tienda se atreve?',
+  },
+  alternates: {
+    canonical: config.siteUrl,
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

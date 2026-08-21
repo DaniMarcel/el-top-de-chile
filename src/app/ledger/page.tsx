@@ -4,9 +4,9 @@ import { getLedger, getStats } from '@/lib/board';
 import { clp, fmtDateTime } from '@/lib/format';
 
 export const metadata: Metadata = {
-  title: 'Ledger público',
+  title: 'Ledger público — Todas las transacciones del ranking',
   description:
-    'Cada peso pagado en TOP DE CHILE, a la vista de todos. Transparencia total: esto es un ranking pagado y se nota.',
+    'Cada peso pagado en TOP DE CHILE, a la vista de todos. Transparencia total del ranking pagado de tiendas de Chile.',
 };
 
 export const dynamic = 'force-dynamic';

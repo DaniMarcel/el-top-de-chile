@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import Board from '@/components/Board';
 import { getBoard, getCategories, getCategoryBySlug, getTopStore, requiredAmount } from '@/lib/board';
 import { clp } from '@/lib/format';
+import { config } from '@/lib/config';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -16,14 +17,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const cat = await getCategoryBySlug(slug);
   if (!cat) return { title: 'Categoría no encontrada' };
   const top = await getTopStore(cat.id);
+  const throneValue = top ? clp(top.current_price ?? 0) : clp(await requiredAmount(cat.id));
   return {
-    title:
-      'Top ' + cat.name + ' - el trono vale ' + (top ? clp(top.current_price ?? 0) : clp(await requiredAmount(cat.id))),
+    title: 'Mejores tiendas de ' + cat.name + ' en Chile — el trono vale ' + throneValue,
     description:
-      'Ranking pagado de ' + cat.name + ' en Chile. El Top 1 es de quien pague más. ' +
+      'Ranking pagado de las mejores tiendas de ' + cat.name + ' en Chile. El Top 1 es de quien pague más. ' +
       (top
-        ? 'Hoy el trono vale ' + clp(top.current_price ?? 0) + '.'
-        : '¿Te lo llevas?'),
+        ? 'Hoy el trono vale ' + throneValue + '. ¿Te lo llevas?'
+        : 'Nadie lo ha reclamado todavía. ¿Te lo llevas?'),
+    alternates: { canonical: config.siteUrl + '/categoria/' + slug },
   };
 }
 
