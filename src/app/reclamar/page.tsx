@@ -35,8 +35,8 @@ export default async function ReclamarPage({ searchParams }: Props) {
   return (
     <div className="mx-auto max-w-3xl space-y-8 pt-10">
       <div className="space-y-3 text-center">
-        <h1 className="crown-glow text-4xl font-black text-gold sm:text-5xl">
-          Reclama el Top 1 👑
+        <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
+          Reclama el Top 1
         </h1>
         <p className="text-mut">
           Paga el mínimo, queda #1 al instante. Si alguien paga más… te destronan. Así de simple.
@@ -46,14 +46,14 @@ export default async function ReclamarPage({ searchParams }: Props) {
       <ClaimForm cats={cats} defaultCat={defaultCat} minIncrement={config.minIncrement} />
 
       <div className="card space-y-4 p-6 text-sm">
-        <h2 className="font-black text-goldsoft">¿Cómo funciona?</h2>
+        <h2 className="font-bold">¿Cómo funciona?</h2>
         <ol className="list-decimal space-y-2 pl-5 text-mut">
           <li>
             Elige tu rubro y paga el mínimo. Hoy el trono más barato parte en{' '}
-            <b className="text-goldsoft">{clp(Math.min(...cats.map((c) => c.required)))}</b>.
+            <b className="text-ink">{clp(Math.min(...cats.map((c) => c.required)))}</b>.
           </li>
           <li>
-            Tu tienda se corona <b className="text-goldsoft">#1</b> con su link, su logo y su badge.
+            Tu tienda se corona <b className="text-ink">#1</b> con su link, su logo y su badge.
             El rey anterior baja un puesto.
           </li>
           <li>
@@ -61,8 +61,8 @@ export default async function ReclamarPage({ searchParams }: Props) {
             trono.
           </li>
         </ol>
-        <p className="rounded-xl border border-line bg-panel2 p-4 text-xs leading-relaxed text-mut">
-          ⚖️ <b className="text-goldsoft">Transparencia total:</b> este es un ranking 100% pagado, no
+        <p className="rounded-xl bg-card2 p-4 text-xs leading-relaxed text-mut">
+          <b className="text-ink">Transparencia total:</b> este es un ranking 100% pagado, no
           editorial. Cada peso pagado es público en el Ledger. Las posiciones se compran y se pierden
           — sin reembolsos, porque lo que compras es visibilidad pública verificable.
         </p>

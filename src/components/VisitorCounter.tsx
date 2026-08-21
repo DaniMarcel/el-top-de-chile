@@ -39,16 +39,16 @@ export default function VisitorCounter() {
 
   return (
     <span className="flex flex-wrap items-center justify-center gap-2">
-      <span className="inline-flex items-center gap-1.5 rounded-full border border-line px-4 py-1.5">
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-card2 px-3.5 py-1.5">
         <span className="relative flex h-2 w-2">
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-lime opacity-75" />
           <span className="relative inline-flex h-2 w-2 rounded-full bg-lime" />
         </span>
-        <span className="font-bold text-lime">{online}</span>
+        <span className="font-semibold text-lime">{online}</span>
         <span className="text-mut">en línea</span>
       </span>
-      <span className="rounded-full border border-line px-4 py-1.5">
-        <span className="font-bold text-neon">{last24h}</span>{' '}
+      <span className="rounded-full bg-card2 px-3.5 py-1.5">
+        <span className="font-semibold">{last24h}</span>{' '}
         <span className="text-mut">visitas en 24 h</span>
       </span>
     </span>

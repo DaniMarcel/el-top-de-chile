@@ -17,15 +17,15 @@ export default async function LedgerPage() {
   return (
     <div className="mx-auto max-w-4xl space-y-8 pt-10">
       <div className="space-y-3 text-center">
-        <h1 className="text-4xl font-black sm:text-5xl">
-          Ledger público 💰
+        <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
+          Ledger público
         </h1>
-        <p className="mx-auto max-w-xl text-mut">
+        <p className="mx-auto max-w-xl text-mut leading-relaxed">
           Cada peso pagado por el trono, a la vista de todos. Transparencia total: esto es un ranking
-          pagado <b className="text-goldsoft">y se nota</b>.
+          pagado <b className="text-ink">y se nota</b>.
         </p>
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-1 text-sm font-bold">
-          <span className="rounded-full border border-line px-4 py-1.5 text-mut">
+        <div className="flex flex-wrap items-center justify-center gap-2 pt-1 text-sm font-medium">
+          <span className="rounded-full bg-card2 px-3.5 py-1.5 text-mut">
             {stats.paidCount} coronaciones pagadas
           </span>
         </div>
@@ -43,7 +43,7 @@ export default async function LedgerPage() {
                 <p className="text-sm">
                   <Link
                     href={`/tienda/${t.store_slug}`}
-                    className="font-bold text-goldsoft hover:underline"
+                    className="font-semibold text-ink hover:text-accent transition-colors"
                   >
                     {t.store_name}
                   </Link>{' '}
@@ -54,11 +54,11 @@ export default async function LedgerPage() {
                   ) : (
                     <span className="text-mut">se coronó rey</span>
                   )}{' '}
-                  en <span className="font-semibold">{t.cat_name}</span>
+                  en <span className="font-medium">{t.cat_name}</span>
                 </p>
                 <p className="text-xs text-mut">{fmtDateTime(t.paid_at!)}</p>
               </div>
-              <p className="shrink-0 font-black text-gold">{clp(t.amount_clp)}</p>
+              <p className="shrink-0 font-bold">{clp(t.amount_clp)}</p>
             </div>
           ))}
         </div>
@@ -66,7 +66,7 @@ export default async function LedgerPage() {
 
       <p className="text-center text-xs text-mut">
         ¿Quieres tu nombre acá arriba?{' '}
-        <Link href="/reclamar" className="font-bold text-neon hover:underline">
+        <Link href="/reclamar" className="font-semibold text-accent hover:underline">
           Toma el trono →
         </Link>
       </p>

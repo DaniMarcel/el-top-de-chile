@@ -65,17 +65,17 @@ export default function ClaimForm({
   }
 
   return (
-    <form onSubmit={onSubmit} className="card space-y-5 p-6 sm:p-8">
+    <form onSubmit={onSubmit} className="card space-y-6 p-6 sm:p-8">
       {error && (
-        <p className="rounded-xl border border-red-500/50 bg-red-500/10 px-4 py-3 text-sm font-bold text-red-300">
-          ⚠️ {error}
+        <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+          {error}
         </p>
       )}
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label className="label" htmlFor="name">
-            Nombre de la tienda *
+            Nombre de la tienda
           </label>
           <input
             id="name"
@@ -88,7 +88,7 @@ export default function ClaimForm({
         </div>
         <div>
           <label className="label" htmlFor="email">
-            Email de contacto *
+            Email de contacto
           </label>
           <input
             id="email"
@@ -101,7 +101,7 @@ export default function ClaimForm({
         </div>
         <div>
           <label className="label" htmlFor="url">
-            URL de la tienda *
+            URL de la tienda
           </label>
           <input
             id="url"
@@ -148,21 +148,21 @@ export default function ClaimForm({
           <p className="mt-2 text-xs text-mut">
             {current.topPrice !== null ? (
               <>
-                El trono de {current.name} hoy vale <b className="text-goldsoft">{clp(current.topPrice)}</b>.
+                El trono de {current.name} hoy vale <b className="text-ink">{clp(current.topPrice)}</b>.
                 Mínimo para tomarlo:{' '}
-                <b className="text-goldsoft">{clp(current.required)}</b> (trono + {clp(minIncrement)}).
+                <b className="text-ink">{clp(current.required)}</b> (trono + {clp(minIncrement)}).
               </>
             ) : (
               <>
                 Nadie ha tomado el trono de {current.name} todavía. Parte en{' '}
-                <b className="text-goldsoft">{clp(current.required)}</b>.
+                <b className="text-ink">{clp(current.required)}</b>.
               </>
             )}
           </p>
         </div>
         <div>
           <label className="label" htmlFor="amount">
-            Tu oferta (CLP) *
+            Tu oferta (CLP)
           </label>
           <input
             id="amount"
@@ -173,7 +173,7 @@ export default function ClaimForm({
             step={100}
             value={amount}
             onChange={(e) => setAmount(Number(e.target.value))}
-            className="input text-lg font-black text-gold"
+            className="input text-lg font-bold"
           />
           <p className="mt-2 text-xs text-mut">
             Puedes pagar más que el mínimo para dejar tu marca. Cada peso queda público en el Ledger.
@@ -181,8 +181,8 @@ export default function ClaimForm({
         </div>
       </div>
 
-      <button type="submit" disabled={loading} className="btn-claim w-full disabled:opacity-60">
-        {loading ? 'Creando orden...' : '\u{1F451} Tomar el trono de ' + current.name}
+      <button type="submit" disabled={loading} className="btn-primary w-full">
+        {loading ? 'Creando orden...' : 'Tomar el trono de ' + current.name}
       </button>
 
       <p className="text-center text-[11px] leading-relaxed text-mut">

@@ -17,7 +17,7 @@ export default async function AdminPage() {
     return (
       <div className="mx-auto max-w-sm pt-20">
         <form action="/api/admin/login" method="post" className="card space-y-4 p-6">
-          <h1 className="text-center text-2xl font-black">🔐 Admin</h1>
+          <h1 className="text-center text-2xl font-bold">Admin</h1>
           <input
             type="password"
             name="token"
@@ -25,7 +25,7 @@ export default async function AdminPage() {
             placeholder="ADMIN_TOKEN"
             className="input"
           />
-          <button type="submit" className="btn-claim w-full">
+          <button type="submit" className="btn-primary w-full">
             Entrar
           </button>
         </form>
@@ -41,34 +41,34 @@ export default async function AdminPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-8 pt-10">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-black">Admin 👑</h1>
+        <h1 className="text-3xl font-bold">Admin</h1>
         <ConfirmForm action="purge" confirmText="¿Borrar todas las tiendas demo? (los pagos reales no se tocan)">
           <input type="hidden" name="confirm" value="si" />
           <button
             type="submit"
-            className="rounded-xl border border-red-500/50 px-4 py-2 text-xs font-bold uppercase tracking-wider text-red-300 hover:bg-red-500/10"
+            className="rounded-xl border border-red-200 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-red-600 hover:bg-red-50 transition-colors"
           >
-            🧹 Purgar demo
+            Purgar demo
           </button>
         </ConfirmForm>
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {[
-          ['💰 Recaudado', clp(stats.revenue)],
-          ['👑 Pagos', String(stats.paidCount)],
-          ['⏳ Pendientes', String(stats.pendingCount)],
-          ['🏪 Tiendas', `${stats.storeCount} (${stats.onBoardCount} en ranking)`],
+          ['Recaudado', clp(stats.revenue)],
+          ['Pagos', String(stats.paidCount)],
+          ['Pendientes', String(stats.pendingCount)],
+          ['Tiendas', `${stats.storeCount} (${stats.onBoardCount} en ranking)`],
         ].map(([label, value]) => (
           <div key={label} className="card p-4 text-center">
-            <p className="text-xs font-bold uppercase tracking-wider text-mut">{label}</p>
-            <p className="mt-1 text-xl font-black text-goldsoft">{value}</p>
+            <p className="text-xs font-medium uppercase tracking-wider text-mut">{label}</p>
+            <p className="mt-1 text-xl font-bold">{value}</p>
           </div>
         ))}
       </div>
 
       <div className="card overflow-hidden">
-        <div className="border-b border-line px-5 py-3 text-xs font-black uppercase tracking-[0.25em] text-mut">
+        <div className="border-b border-line px-5 py-3 text-xs font-bold uppercase tracking-wider text-mut">
           Tiendas
         </div>
         <div className="overflow-x-auto">
@@ -85,25 +85,23 @@ export default async function AdminPage() {
             </thead>
             <tbody className="divide-y divide-line">
               {stores.map((s) => (
-                <tr key={s.id} className="hover:bg-panel2">
+                <tr key={s.id} className="hover:bg-card2 transition-colors">
                   <td className="px-5 py-3">
-                    <Link href={'/tienda/' + s.slug} className="font-bold hover:text-goldsoft">
+                    <Link href={'/tienda/' + s.slug} className="font-semibold hover:text-accent transition-colors">
                       {s.name}
                     </Link>
                     {!!s.is_demo && (
-                      <span className="ml-2 rounded-full border border-mag/40 bg-mag/10 px-2 py-0.5 text-[10px] font-bold text-mag">
-                        demo
-                      </span>
+                      <span className="badge-demo ml-2">demo</span>
                     )}
                   </td>
                   <td className="px-3 py-3 text-mut">{catName(s.category_id)}</td>
                   <td className="px-3 py-3">{s.position ?? '—'}</td>
-                  <td className="px-3 py-3 font-bold text-goldsoft">
+                  <td className="px-3 py-3 font-semibold">
                     {s.current_price ? clp(s.current_price) : '—'}
                   </td>
                   <td className="px-3 py-3">
                     {!!s.verified ? (
-                      <span className="font-bold text-lime">✓ sí</span>
+                      <span className="font-semibold text-lime">✓ sí</span>
                     ) : (
                       <span className="text-mut">no</span>
                     )}
@@ -116,7 +114,7 @@ export default async function AdminPage() {
                         <input type="hidden" name="verified" value={s.verified ? '0' : '1'} />
                         <button
                           type="submit"
-                          className="rounded-lg border border-line px-2.5 py-1 text-xs font-bold hover:border-lime hover:text-lime"
+                          className="rounded-lg border border-line px-2.5 py-1 text-xs font-medium hover:border-lime hover:text-lime transition-colors"
                         >
                           {s.verified ? 'Quitar ✓' : 'Verificar'}
                         </button>
@@ -128,7 +126,7 @@ export default async function AdminPage() {
                       >
                         <button
                           type="submit"
-                          className="rounded-lg border border-line px-2.5 py-1 text-xs font-bold text-red-300 hover:border-red-500"
+                          className="rounded-lg border border-line px-2.5 py-1 text-xs font-medium text-red-500 hover:border-red-400 transition-colors"
                         >
                           🗑
                         </button>

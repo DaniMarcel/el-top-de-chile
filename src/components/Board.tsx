@@ -26,15 +26,8 @@ interface Props {
   required: number;
 }
 
-const RANK_STYLE = [
-  '',
-  'border-gold text-gold bg-gold/10 shadow-[0_0_18px_rgba(245,197,66,0.25)]',
-  'border-slate-300/60 text-slate-200 bg-slate-300/5',
-  'border-amber-700 text-amber-600 bg-amber-700/10',
-];
-
 function fireConfetti() {
-  const colors = ['#f5c542', '#22d3ee', '#e879f9', '#a3e635'];
+  const colors = ['#dc2626', '#ca8a04', '#2563eb', '#16a34a'];
   confetti({ particleCount: 130, spread: 85, origin: { y: 0.3 }, colors, zIndex: 9999 });
   setTimeout(
     () => confetti({ particleCount: 80, angle: 60, spread: 60, origin: { x: 0 }, colors, zIndex: 9999 }),
@@ -63,7 +56,7 @@ export default function Board({ catSlug, catName, initial, topPrice, required }:
     const params = new URLSearchParams(window.location.search);
     const king = params.get('king');
     if (king) {
-      setBanner('\u{1F451} ' + decodeURIComponent(king) + ' acaba de tomar el trono de ' + catName + '!');
+      setBanner(decodeURIComponent(king) + ' acaba de tomar el trono de ' + catName);
       fireConfetti();
       params.delete('king');
       params.delete('cat');
@@ -82,7 +75,7 @@ export default function Board({ catSlug, catName, initial, topPrice, required }:
           kingRef.current !== null &&
           newKing !== kingRef.current
         ) {
-          setBanner('\u{1F451} NUEVO REY: ' + data.stores[0].name + ' destronó al rey de ' + catName);
+          setBanner('Nuevo rey: ' + data.stores[0].name + ' destronó al rey de ' + catName);
           fireConfetti();
         }
         firstRun.current = false;
@@ -99,25 +92,29 @@ export default function Board({ catSlug, catName, initial, topPrice, required }:
   return (
     <div className="space-y-4">
       {banner && (
-        <div className="animate-kingpop card border-gold bg-gold/10 px-5 py-4 text-center text-lg font-black text-goldsoft">
-          {banner}
+        <div className="animate-kingpop card border-gold bg-gold-bg px-5 py-4 text-center font-bold text-ink">
+          👑 {banner}
         </div>
       )}
 
-      <div className="card animate-pulsegold flex flex-col items-center justify-between gap-4 border-gold/60 bg-gradient-to-br from-gold/10 via-panel to-panel px-6 py-6 sm:flex-row">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-mut">
+      {/* Throne value */}
+      <div className="card flex flex-col items-center justify-between gap-4 overflow-hidden sm:flex-row">
+        <div className="w-full border-b border-line bg-card2 px-6 py-5 sm:w-auto sm:flex-1 sm:border-b-0 sm:border-r">
+          <p className="text-xs font-medium uppercase tracking-wide text-mut">
             El trono de {catName} hoy vale
           </p>
-          <p className="crown-glow mt-1 text-4xl font-black text-gold sm:text-5xl">
+          <p className="mt-1 text-4xl font-extrabold sm:text-5xl">
             {clp(price ?? 0)}
           </p>
         </div>
-        <Link href={'/reclamar?cat=' + catSlug} className="btn-claim">
-          👑 Tomar el trono · {clp(required)}
-        </Link>
+        <div className="px-6 pb-5 sm:pb-0 sm:pr-6">
+          <Link href={'/reclamar?cat=' + catSlug} className="btn-primary whitespace-nowrap">
+            Tomar el trono · {clp(required)}
+          </Link>
+        </div>
       </div>
 
+      {/* Ranking list */}
       <div className="card divide-y divide-line overflow-hidden">
         {stores.length === 0 && (
           <p className="px-6 py-10 text-center text-mut">
@@ -127,12 +124,14 @@ export default function Board({ catSlug, catName, initial, topPrice, required }:
         {stores.map((s) => (
           <div
             key={s.id}
-            className="flex items-center gap-4 px-5 py-4 transition-colors hover:bg-panel2"
+            className="flex items-center gap-4 px-5 py-4 transition-colors hover:bg-card2"
           >
             <div
               className={
-                'flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border text-lg font-black ' +
-                (RANK_STYLE[s.position ?? 0] || 'border-line text-mut')
+                'flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold ' +
+                (s.position === 1
+                  ? 'bg-gold-bg text-gold border border-gold/30'
+                  : 'bg-card2 text-mut border border-line')
               }
             >
               {s.position === 1 ? '👑' : s.position}
@@ -140,13 +139,14 @@ export default function Board({ catSlug, catName, initial, topPrice, required }:
 
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <Link href={'/tienda/' + s.slug} className="truncate font-bold hover:text-goldsoft transition-colors">
+                <Link
+                  href={'/tienda/' + s.slug}
+                  className="truncate font-semibold hover:text-accent transition-colors"
+                >
                   {s.name}
                 </Link>
                 {!!s.verified && (
-                  <span className="rounded-full border border-lime/40 bg-lime/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-lime">
-                    ✓ verificada
-                  </span>
+                  <span className="badge-verified">Verificada</span>
                 )}
               </div>
               {s.pitch && (
@@ -155,9 +155,8 @@ export default function Board({ catSlug, catName, initial, topPrice, required }:
             </div>
 
             <div className="shrink-0 text-right">
-              <p className="font-black text-goldsoft">
+              <p className="font-bold">
                 {clp(s.current_price ?? 0)}
-                <span className="ml-1 text-[10px] font-bold uppercase text-mut">pagó</span>
               </p>
               <p className="text-xs text-mut">{s.claimed_at ? timeAgo(s.claimed_at) : ''}</p>
             </div>

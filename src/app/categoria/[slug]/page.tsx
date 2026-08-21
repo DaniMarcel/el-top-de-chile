@@ -42,16 +42,16 @@ export default async function CategoryPage({ params }: Props) {
   return (
     <div className="space-y-8 pt-10">
       <div className="space-y-3">
-        <Link href="/" className="text-sm font-bold text-neon hover:underline">
+        <Link href="/" className="text-sm font-medium text-accent hover:underline">
           ← Ranking
         </Link>
-        <h1 className="text-4xl font-black sm:text-5xl">
+        <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
           Top {cat.name}
         </h1>
         {cat.description && <p className="text-mut">{cat.description}</p>}
-        <p className="text-sm font-bold text-goldsoft">
-          El trono hoy vale {clp(top?.current_price ?? 0)} — mínimo para tomarlo:{' '}
-          {clp(required)}
+        <p className="text-sm font-medium text-mut">
+          El trono hoy vale <b className="text-ink">{clp(top?.current_price ?? 0)}</b> — mínimo para tomarlo:{' '}
+          <b className="text-ink">{clp(required)}</b>
         </p>
       </div>
 
@@ -60,7 +60,7 @@ export default async function CategoryPage({ params }: Props) {
           <Link
             key={c.slug}
             href={'/categoria/' + c.slug}
-            className={'chip ' + (c.slug === slug ? 'chip-active' : 'chip-idle')}
+            className={'tab ' + (c.slug === slug ? 'tab-active' : 'tab-idle')}
           >
             {c.name}
           </Link>
