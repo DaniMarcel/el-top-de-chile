@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0a0a13;
+  --color-panel: #12121f;
+  --color-panel2: #181828;
+  --color-line: #27273d;
+  --color-gold: #f5c542;
+  --color-goldsoft: #ffdf8e;
+  --color-golddim: #8a6d1f;
+  --color-neon: #22d3ee;
+  --color-mag: #e879f9;
+  --color-lime: #a3e635;
+  --color-mut: #9a9ab5;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-ink);
+  color: #f4f4fa;
+  font-family: "Segoe UI", ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: #0a0a13;
+}
+
+@layer components {
+  .card {
+    @apply bg-panel border border-line rounded-2xl;
+  }
+  .btn-claim {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl font-extrabold uppercase tracking-wider text-ink px-6 py-3 transition-transform;
+    background: linear-gradient(135deg, #f5c542 0%, #ffdf8e 50%, #f5c542 100%);
+    box-shadow: 0 0 24px rgba(245, 197, 66, 0.35);
+  }
+  .btn-claim:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 0 40px rgba(245, 197, 66, 0.55);
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl font-bold uppercase tracking-wider px-5 py-3 border border-line text-mut transition-colors;
+  }
+  .btn-ghost:hover {
+    @apply border-neon text-neon;
+  }
+  .chip {
+    @apply inline-block px-4 py-2 rounded-full border text-sm font-semibold transition-colors;
+  }
+  .chip-active {
+    @apply border-gold text-gold;
+    background: rgba(245, 197, 66, 0.08);
+    box-shadow: 0 0 16px rgba(245, 197, 66, 0.2);
+  }
+  .chip-idle {
+    @apply border-line text-mut hover:border-golddim hover:text-goldsoft;
+  }
+  .input {
+    @apply w-full rounded-xl border border-line bg-panel2 px-4 py-3 text-sm outline-none transition-colors placeholder:text-mut/60;
+  }
+  .input:focus {
+    @apply border-gold;
+    box-shadow: 0 0 0 3px rgba(245, 197, 66, 0.12);
+  }
+  .label {
+    @apply block text-xs font-bold uppercase tracking-wider text-mut mb-2;
+  }
+  .crown-glow {
+    text-shadow: 0 0 30px rgba(245, 197, 66, 0.5);
+  }
+}
+
+@keyframes kingpop {
+  0% { transform: scale(0.9); opacity: 0; }
+  60% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-kingpop {
+  animation: kingpop 0.5s ease both;
+}
+
+@keyframes pulsegold {
+  0%, 100% { box-shadow: 0 0 20px rgba(245, 197, 66, 0.25); }
+  50% { box-shadow: 0 0 44px rgba(245, 197, 66, 0.55); }
+}
+.animate-pulsegold {
+  animation: pulsegold 2.2s ease-in-out infinite;
+}
