@@ -98,6 +98,8 @@ function pgPool() {
     connectionString: process.env.DATABASE_URL,
     // serverless: un solo cliente por lambda evita agotar sockets
     max: 1,
+    // Forzar IPv4: el sandbox de build de Vercel no tiene ruta IPv6
+    family: 4,
     ssl: process.env.PGSSL === 'false' ? false : { rejectUnauthorized: false },
   });
   return pool;

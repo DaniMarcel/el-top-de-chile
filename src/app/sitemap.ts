@@ -2,6 +2,9 @@ import type { MetadataRoute } from 'next';
 import { getAllStores, getCategories } from '@/lib/board';
 import { config } from '@/lib/config';
 
+// El sitemap consulta la DB: debe generarse en runtime, no en build
+export const dynamic = 'force-dynamic';
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [cats, stores] = await Promise.all([getCategories(), getAllStores()]);
   const now = new Date();
