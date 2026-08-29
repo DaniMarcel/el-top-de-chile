@@ -108,7 +108,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </Link>
               . No es un ranking editorial.
             </p>
-            <p className="text-mut/50">Hecho en Chile 🇨🇱 — TOP DE CHILE</p>
+            <p className="text-mut/50">
+              Hecho en Chile 🇨🇱 — TOP DE CHILE ·{' '}
+              <Link href="/terminos" className="underline hover:text-ink transition-colors">
+                Términos y Condiciones
+              </Link>
+            </p>
           </div>
         </footer>
       </body>

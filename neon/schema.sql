@@ -63,5 +63,15 @@ insert into categories (slug, name, description) values
   ('cafe', 'Café y Tostadores', 'Café de especialidad, tostado en Chile.'),
   ('belleza', 'Belleza', 'Cosmética, skincare y cuidado personal.'),
   ('mascotas', 'Mascotas', 'Todo para tus hijos de cuatro patas.'),
-  ('gaming', 'Gaming', 'Periféricos, consolas y setups.')
+  ('gaming', 'Gaming', 'Periféricos, consolas y setups.'),
+  ('deportes', 'Deportes y Outdoor', 'Running, ciclismo, camping y equipamiento deportivo.'),
+  ('hogar', 'Hogar y Decoración', 'Muebles, deco y todo para la casa.'),
+  ('autos', 'Autos y Motos', 'Accesorios, repuestos y tuning.'),
+  ('salud', 'Salud y Bienestar', 'Vitaminas, wellness y vida sana.'),
+  ('outdoor', 'Aventura y Montaña', 'Trekking, escalada y vida al aire libre.'),
+  ('joyeria', 'Joyería y Accesorios', 'Plata, oro y diseño de autor chileno.'),
+  ('alimentos', 'Alimentos y Gourmet', 'Productos artesanales, orgánicos y gourmet.'),
+  ('cerveza', 'Cerveza Artesanal', 'Las mejores cervecerías craft de Chile.'),
+  ('libros', 'Libros y Papelería', 'Editoriales, librerías y papelería de diseño.'),
+  ('bebes', 'Bebés y Niños', 'Ropa, juguetes y todo para los más chicos.')
 on conflict (slug) do nothing;

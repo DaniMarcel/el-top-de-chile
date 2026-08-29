@@ -14,6 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: config.siteUrl, lastModified: now },
     { url: config.siteUrl + '/ledger', lastModified: now },
     { url: config.siteUrl + '/reclamar', lastModified: now },
+    { url: config.siteUrl + '/terminos', lastModified: now },
     ...cats.map((c) => ({
       url: config.siteUrl + '/categoria/' + c.slug,
       lastModified: now,
