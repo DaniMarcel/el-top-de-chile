@@ -49,17 +49,16 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es-CL">
-      <body>
+      <head>
         {config.adsenseClientId ? (
-          <Script
-            id="adsense-script"
+          <script
             async
-            strategy="afterInteractive"
-            crossOrigin="anonymous"
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${config.adsenseClientId}`}
+            crossOrigin="anonymous"
           />
         ) : null}
-
+      </head>
+      <body>
         {config.gaMeasurementId ? (
           <>
             <Script
