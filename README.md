@@ -1,100 +1,54 @@
-# TOP DE CHILE 👑
+# ¿Te alcanza?
 
-**El ranking de tiendas de Chile que se compra.** El Top 1 es de quien pague más: una tienda paga el mínimo para coronarse #1, otra paga más y la destrona (la anterior baja un puesto). Cada peso queda público en el Ledger.
-
-## Requisitos
-
-- Node.js 24+ (usa `node:sqlite` nativo en dev — cero dependencias nativas)
+Calculadora chilena, gratuita y anónima para descubrir hasta qué día alcanza el sueldo y cuántas horas de trabajo cuestan los gastos mensuales.
 
 ## Desarrollo local
 
+Requiere Node.js 24 o superior.
+
 ```bash
 npm install
-npm run seed        # siembra categorías + tiendas demo + ledger de ejemplo
-npm run dev         # http://localhost:3000
+npm run dev
 ```
 
-> Re-sembrar desde cero: `npm run seed:reset`
+La aplicación estará disponible en `http://localhost:3000`.
 
-**Probar el flujo completo (modo demo):** ve a **Reclamar Top 1**, completa el formulario y paga en el checkout simulado (sin cuenta Flow). Verás confetti, el destronamiento, el Ledger y la ficha de la tienda. Admin en `/admin` (token: `eltrono-admin`).
+## Qué calcula
 
-## Contador de visitantes
+- El día estimado en que el saldo mensual llega a cero.
+- El porcentaje del sueldo destinado a gastos.
+- El valor aproximado de una hora de trabajo.
+- Las horas de trabajo necesarias para pagar los gastos y la vivienda.
 
-El home muestra **visitantes en línea** (últimos 5 min) y **visitas únicas en 24 h**. Se registra automáticamente al cargar la página; bots/crawlers se ignoran y las IP se usan solo para contar (sin guardar datos personales).
+Los montos se procesan en el navegador. No se envían ni se almacenan.
 
-## Producción: Vercel + Neon ($0)
+## Google AdSense
 
-La app usa **SQLite en dev** y **Postgres (Neon) en producción**, elegido automáticamente por la variable `DATABASE_URL`. La lógica del juego es idéntica en ambos.
+La integración está inactiva mientras no existan credenciales reales. Crea dos bloques de anuncios responsivos en AdSense y configura:
 
-### 1. Neon (la base de datos)
-
-1. Crea un proyecto gratis en [neon.tech](https://neon.tech) (región **South America (São Paulo)** para mejor latencia en Chile).
-2. Ve a **SQL Editor** → New query → pega el contenido de `neon/schema.sql` → **Run**. Esto crea tablas + categorías.
-3. Ve a **Connection Details** → copia la connection string (ya incluye `sslmode=require`).
-4. (Opcional) Siembra tiendas demo contra Neon:
-   ```bash
-   DATABASE_URL="postgresql://neondb_owner:xxxxx@ep-xxxx.sa-east-1.aws.neon.tech/neondb?sslmode=require" npm run seed
-   ```
-
-### 2. Vercel
-
-1. Sube el proyecto a GitHub (puedes crear el repo con `gh repo create` o desde github.com → New repository → push).
-2. En [vercel.com](https://vercel.com) → **Add New → Project** → importa el repo. Vercel detecta Next.js solo.
-3. En **Settings → Environment Variables** agrega:
-   - `DATABASE_URL` = la connection string de Neon
-   - `SITE_URL` = `https://topdechile.cl`
-   - `ADMIN_TOKEN` = un token seguro (`openssl rand -hex 16`)
-   - `MOCK_PAYMENTS` = `true` (hasta configurar Flow; el checkout simulado sirve para lanzar)
-4. **Deploy**. Obtienes una URL tipo `el-trono.vercel.app`.
-
-### 3. Dominio topdechile.cl (NIC Chile)
-
-1. En [nic.cl](https://www.nic.cl) → **Mis dominios** → tu dominio → **Administrar DNS** (o Delegación).
-2. Vercel te da los registros: **Settings → Domains** de tu proyecto → agrega `topdechile.cl` y `www.topdechile.cl`. Vercel muestra los valores de **A record** y **CNAME** a configurar en NIC.
-3. Aplica los registros en NIC (DNS externo) y espera propagación (minutos a horas).
-4. Cuando cargue `https://topdechile.cl`, Vercel emite el certificado HTTPS automático.
-
-### 4. Pagos reales (Flow.cl)
-
-1. Cuenta en [flow.cl](https://www.flow.cl) (sin costo mensual, comisión por transacción).
-2. Panel → **Integración API** → credenciales del comercio (`apiKey`, `secret`).
-3. En Vercel: `MOCK_PAYMENTS=false`, `FLOW_API_KEY=...`, `FLOW_SECRET=...`.
-4. El webhook `POST /api/flow/webhook` se llama automáticamente (firma verificada).
-
-## Reglas del juego (variables de entorno)
-
-| Variable | Default | Qué hace |
-|---|---|---|
-| `STARTING_PRICE` | `1000` | Precio base del trono en un rubro vacío (~1 USD) |
-| `MIN_INCREMENT` | `500` | Incremento mínimo para destronar |
-| `ADMIN_TOKEN` | `eltrono-admin` | Token de `/admin` |
-| `SITE_URL` | `http://localhost:3000` | URL pública (Flow, widget, SEO) |
-| `DATABASE_URL` | *(vacío)* | Si está definida → Postgres/Neon; si no → SQLite local |
-
-## Widget embebible (para las tiendas)
-
-```html
-<script src="https://topdechile.cl/api/widget.js" data-store="mi-tienda" data-theme="dark"></script>
+```env
+NEXT_PUBLIC_ADSENSE_CLIENT_ID=ca-pub-XXXXXXXXXXXXXXXX
+NEXT_PUBLIC_ADSENSE_SLOT_TOP=XXXXXXXXXX
+NEXT_PUBLIC_ADSENSE_SLOT_INLINE=XXXXXXXXXX
 ```
 
-## Estructura
+Con el client ID configurado, `/ads.txt` se genera automáticamente. La gestión de consentimiento para visitantes del EEE, Reino Unido y Suiza debe activarse desde **AdSense → Privacidad y mensajes** antes de monetizar tráfico de esas regiones.
 
-```
-src/
-  app/            páginas + API routes (Next.js App Router, SSR para SEO)
-  lib/
-    db.ts         adapter SQLite (dev) / Postgres (prod) con la misma API
-    board.ts      lógica del juego: reclamo, destronamiento, ledger, visitas, admin
-    flow.ts       integración Flow.cl (real + mock)
-  components/     Board (vivo + confetti), ClaimForm, VisitorCounter, ConfirmForm
-scripts/seed.mts  datos demo (funciona contra SQLite y Postgres)
-neon/schema.sql   schema + categorías para Neon
+## Aportes y medición
+
+```env
+NEXT_PUBLIC_DONATION_URL=https://...
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+CONTACT_EMAIL=hola@tu-dominio.cl
+SITE_URL=https://tu-dominio.cl
 ```
 
-## Legal
+Si no existe `NEXT_PUBLIC_DONATION_URL`, la interfaz muestra “Aportes próximamente”. Analytics tampoco se carga si no se configura un ID.
 
-El footer y el formulario declaran que es un ranking 100% pagado (transparencia publicitaria, Ley 19.496/SERNAC). Los links a tiendas llevan `rel="sponsored nofollow"`.
+## SEO y GEO
 
-## Disclaimer
+La portada contiene contenido explicativo indexable, preguntas frecuentes, metodología pública, metadata social y datos estructurados `WebApplication`. El sitemap incluye únicamente la herramienta y sus páginas de confianza. Las rutas públicas del antiguo ranking redirigen permanentemente a la portada.
 
-MVP. Los pagos simulados no mueven plata real; prueba Flow primero en su entorno de testing.
+## Aviso
+
+El resultado es educativo y aproximado; no constituye asesoría financiera, tributaria, laboral ni legal.
