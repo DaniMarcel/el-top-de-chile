@@ -25,6 +25,9 @@ export const metadata: Metadata = {
   authors: [{ name: '¿Te alcanza?' }],
   creator: '¿Te alcanza?',
   publisher: '¿Te alcanza?',
+  other: {
+    'google-adsense-account': config.adsenseClientId,
+  },
   icons: { icon: '/icon.svg' },
   alternates: { canonical: config.siteUrl },
   openGraph: {

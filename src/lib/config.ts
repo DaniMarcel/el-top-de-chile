@@ -9,11 +9,13 @@ function validUrl(s: string | undefined, fallback: string): string {
 }
 
 const rawSiteUrl = validUrl(process.env.SITE_URL, 'http://localhost:3000');
+// El ID de publisher es público por diseño: AdSense lo expone en el HTML y en ads.txt.
+const adsensePublisherId = 'ca-pub-1927993980009423';
 
 export const config = {
   siteUrl: rawSiteUrl,
   siteName: '¿Te alcanza?',
-  adsenseClientId: process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || '',
+  adsenseClientId: process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || adsensePublisherId,
   adsenseTopSlot: process.env.NEXT_PUBLIC_ADSENSE_SLOT_TOP || '',
   adsenseInlineSlot: process.env.NEXT_PUBLIC_ADSENSE_SLOT_INLINE || '',
   donationUrl: process.env.NEXT_PUBLIC_DONATION_URL || '',
